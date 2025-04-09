@@ -1,5 +1,5 @@
-import * as Carousel from "./Carousel.js";
-import axios from "axios";
+// import * as Carousel from "./Carousel.js";
+// import axios from "axios";
 
 // The breed selection input element.
 const breedSelect = document.getElementById("breedSelect");
@@ -11,7 +11,7 @@ const progressBar = document.getElementById("progressBar");
 const getFavouritesBtn = document.getElementById("getFavouritesBtn");
 
 // Step 0: Store your API key here for reference and easy access.
-const API_KEY = "";
+const API_KEY = "live_RxmagQydG2YyXUIUONqbOq6n9i5R5U3eg0QfUTtKWEAJmKULHU3ksbJaZSz5BFfd";
 
 /**
  * 1. Create an async function "initialLoad" that does the following:
@@ -22,6 +22,42 @@ const API_KEY = "";
  * This function should execute immediately.
  */
 
+
+async function initialLoad() {
+  try {
+    let res = await fetch('https://api.thecatapi.com/v1/breeds', {
+      headers: {
+        // "content-type": "application/json",
+        "x-api-key": 'live_RxmagQydG2YyXUIUONqbOq6n9i5R5U3eg0QfUTtKWEAJmKULHU3ksbJaZSz5BFfd',
+      },
+    });
+
+    if (res.ok) {
+      console.log("Promise resolved");
+      // ...do something with the response
+      const jsonData = await res.json();
+      // console.log(jsonData);
+      // Carousel.clear();
+      for (let i of jsonData) {
+        // console.log(i);
+        let breedOptions = document.createElement("option");
+        breedOptions.value = i.id;
+        breedOptions.textContent = i.name;
+        breedSelect.appendChild(breedOptions);
+      }
+
+      // Selecting the first breed of cats
+      breedSelect.selectedIndex = 0;
+      await handleSelect({ target: breedSelect });
+    } else {
+      console.error("Promise resolved");
+    }
+  } catch (err) {
+    console.error(err);
+    // console.error("Promise rejected");
+  }
+}
+initialLoad();
 /**
  * 2. Create an event handler for breedSelect that does the following:
  * - Retrieve information on the selected breed from the cat API using fetch().
@@ -88,9 +124,9 @@ const API_KEY = "";
  *   you delete that favourite using the API, giving this function "toggle" functionality.
  * - You can call this function by clicking on the heart at the top right of any image.
  */
-export async function favourite(imgId) {
-  // your code here
-}
+// export async function favourite(imgId) {
+//   // your code here
+// }
 
 /**
  * 9. Test your favourite() function by creating a getFavourites() function.
