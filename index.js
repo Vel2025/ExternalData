@@ -10,6 +10,9 @@ const progressBar = document.getElementById("progressBar");
 // The get favourites button element.
 const getFavouritesBtn = document.getElementById("getFavouritesBtn");
 
+
+const carousel = document.querySelector('.carousel');
+
 // Step 0: Store your API key here for reference and easy access.
 const API_KEY = "live_RxmagQydG2YyXUIUONqbOq6n9i5R5U3eg0QfUTtKWEAJmKULHU3ksbJaZSz5BFfd";
 
@@ -21,43 +24,32 @@ const API_KEY = "live_RxmagQydG2YyXUIUONqbOq6n9i5R5U3eg0QfUTtKWEAJmKULHU3ksbJaZS
  *  - Each option should display text equal to the name of the breed.
  * This function should execute immediately.
  */
-
-
 async function initialLoad() {
   try {
-    let res = await fetch('https://api.thecatapi.com/v1/breeds', {
-      headers: {
-        // "content-type": "application/json",
-        "x-api-key": 'live_RxmagQydG2YyXUIUONqbOq6n9i5R5U3eg0QfUTtKWEAJmKULHU3ksbJaZSz5BFfd',
-      },
-    });
+      // Fetch breeds
+      const response = await fetch('https://api.thecatapi.com/v1/breeds', {
+          headers: {
+              'x-api-key': API_KEY
+          }
+      });
+      const breeds = await response.json();
 
-    if (res.ok) {
-      console.log("Promise resolved");
-      // ...do something with the response
-      const jsonData = await res.json();
-      // console.log(jsonData);
-      // Carousel.clear();
-      for (let i of jsonData) {
-        // console.log(i);
-        let breedOptions = document.createElement("option");
-        breedOptions.value = i.id;
-        breedOptions.textContent = i.name;
-        breedSelect.appendChild(breedOptions);
-      }
+      // Populate breed select options
+      breeds.forEach(breed => {
+          const option = document.createElement('option');
+          option.value = breed.id;
+          option.textContent = breed.name;
+          breedSelect.appendChild(option);
+      });
 
-      // Selecting the first breed of cats
-      breedSelect.selectedIndex = 0;
-      await handleSelect({ target: breedSelect });
-    } else {
-      console.error("Promise resolved");
-    }
-  } catch (err) {
-    console.error(err);
-    // console.error("Promise rejected");
+      // Trigger initial carousel load with first breed
+      handleBreedSelection({ target: { value: breeds[0].id } });
+  } catch (error) {
+      console.error('Error loading breeds:', error);
   }
 }
-initialLoad();
+
+
 /**
  * 2. Create an event handler for breedSelect that does the following:
  * - Retrieve information on the selected breed from the cat API using fetch().
@@ -72,6 +64,60 @@ initialLoad();
  * - Each new selection should clear, re-populate, and restart the Carousel.
  * - Add a call to this function to the end of your initialLoad function above to create the initial carousel.
  */
+
+
+
+breedSelect.addEventListener('change', handleBreedSelection);
+
+
+async function handleBreedSelection(event) {
+  try {
+      const breedId = event.target.value;
+     
+      // Fetch breed images and info
+      const response = await fetch(
+          `https://api.thecatapi.com/v1/images/search?breed_ids=${breedId}&limit=5`, {
+              headers: {
+                  'x-api-key': API_KEY
+              }
+          }
+      );
+      const breedData = await response.json();
+
+      // Clear existing content
+      carousel.innerHTML = '';
+      infoDump.innerHTML = '';
+
+      // Populate carousel
+      breedData.forEach(item => {
+          const carouselItem = document.createElement('div');
+          carouselItem.className = 'carousel-item';
+          const img = document.createElement('img');
+          img.src = item.url;
+          img.alt = 'Cat image';
+          carouselItem.appendChild(img);
+          carousel.appendChild(carouselItem);
+      });
+
+      // Populate info section (using first item for breed info)
+      if (breedData.length > 0) {
+          const breed = breedData[0].breeds[0];
+          infoDump.innerHTML = `
+              <h2>${breed.name}</h2>
+              <p>Origin: ${breed.origin}</p>
+              <p>Temperament: ${breed.temperament}</p>
+              <p>Description: ${breed.description}</p>
+          `;
+      }
+
+  } catch (error) {
+      console.error('Error loading breed data:', error);
+  }
+}
+
+
+initialLoad();
+
 
 /**
  * 3. Fork your own sandbox, creating a new one named "JavaScript Axios Lab."
