@@ -73,16 +73,18 @@ breedSelect.addEventListener('change', handleBreedSelection);
 async function handleBreedSelection(event) {
   try {
       const breedId = event.target.value;
+      console.log(breedId);
      
       // Fetch breed images and info
       const response = await fetch(
-          `https://api.thecatapi.com/v1/images/search?breed_ids=${breedId}&limit=5`, {
+          `https://api.thecatapi.com/v1/images/search?breed_ids=${breedId}&limit=10`, {
               headers: {
                   'x-api-key': API_KEY
               }
           }
       );
       const breedData = await response.json();
+      console.log(breedData);
 
       // Clear existing content
       carousel.innerHTML = '';
@@ -97,6 +99,7 @@ async function handleBreedSelection(event) {
           img.alt = 'Cat image';
           carouselItem.appendChild(img);
           carousel.appendChild(carouselItem);
+          carousel.start;
       });
 
       // Populate info section (using first item for breed info)
@@ -109,6 +112,7 @@ async function handleBreedSelection(event) {
               <p>Description: ${breed.description}</p>
               <p>Life Span: ${breed.life_span}</p>
           `;
+         
       }
 
   } catch (error) {
