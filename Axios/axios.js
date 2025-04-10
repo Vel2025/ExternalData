@@ -3,6 +3,8 @@ import axios from 'axios';
 const breedSelect = document.getElementById('breedSelect');
 const carousel = document.querySelector('.carousel');
 const infoDump = document.getElementById('infoDump');
+
+
 const API_KEY = 'live_RxmagQydG2YyXUIUONqbOq6n9i5R5U3eg0QfUTtKWEAJmKULHU3ksbJaZSz5BFfd';// Replace with your actual API key
 
 // Configure Axios defaults

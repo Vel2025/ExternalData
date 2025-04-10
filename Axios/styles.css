@@ -71,6 +71,8 @@ body {
 }
 .card img {
   max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
 }
 @media (max-width: 767px) {
   .card .img-wrapper {

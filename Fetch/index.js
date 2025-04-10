@@ -1,4 +1,4 @@
-// import * as Carousel from "./Carousel.js";
+//import * as Carousel from "./carousel";
 // import axios from "axios";
 
 // The breed selection input element.
@@ -170,9 +170,9 @@ initialLoad();
  *   you delete that favourite using the API, giving this function "toggle" functionality.
  * - You can call this function by clicking on the heart at the top right of any image.
  */
-// export async function favourite(imgId) {
-//   // your code here
-// }
+export async function favourite(imgId) {
+//your code here
+}
 
 /**
  * 9. Test your favourite() function by creating a getFavourites() function.
