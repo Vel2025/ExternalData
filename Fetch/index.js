@@ -1,4 +1,4 @@
-//import * as Carousel from "./carousel";
+import * as Carousel from "./carousel.js";
 // import axios from "axios";
 
 // The breed selection input element.
@@ -107,6 +107,7 @@ async function handleBreedSelection(event) {
               <p>Origin: ${breed.origin}</p>
               <p>Temperament: ${breed.temperament}</p>
               <p>Description: ${breed.description}</p>
+              <p>Life Span: ${breed.life_span}</p>
           `;
       }
 
