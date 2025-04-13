@@ -1,4 +1,4 @@
-import * as Carousel from "./carousel.js";
+import * as carousel from "./carousel.js";
 // import axios from "axios";
 
 // The breed selection input element.
@@ -10,8 +10,7 @@ const progressBar = document.getElementById("progressBar");
 // The get favourites button element.
 const getFavouritesBtn = document.getElementById("getFavouritesBtn");
 
-
-const carousel = document.querySelector('.carousel');
+//const carousel = document.querySelector('.carousel');
 
 // Step 0: Store your API key here for reference and easy access.
 const API_KEY = "live_RxmagQydG2YyXUIUONqbOq6n9i5R5U3eg0QfUTtKWEAJmKULHU3ksbJaZSz5BFfd";
@@ -41,7 +40,7 @@ async function initialLoad() {
           option.textContent = breed.name;
           breedSelect.appendChild(option);
       });
-
+console.log(breeds);
       // Trigger initial carousel load with first breed
       handleBreedSelection({ target: { value: breeds[0].id } });
   } catch (error) {
@@ -87,20 +86,39 @@ async function handleBreedSelection(event) {
       console.log(breedData);
 
       // Clear existing content
-      carousel.innerHTML = '';
+      carousel.clear();
       infoDump.innerHTML = '';
 
-      // Populate carousel
+
+      //Populate carousel
       breedData.forEach(item => {
-          const carouselItem = document.createElement('div');
-          carouselItem.className = 'carousel-item';
-          const img = document.createElement('img');
-          img.src = item.url;
-          img.alt = 'Cat image';
-          carouselItem.appendChild(img);
-          carousel.appendChild(carouselItem);
-          carousel.start;
+        //const carouselItem = document.createElement('div');
+        const carouselItem = carousel.createCarouselItem(
+            item.url,
+            breedData.name,
+            item.id
+            
+          );
+
+        //carouselItem.className = 'carousel-item';
+        //const img = document.createElement('img');
+        //img.src = item.url;
+        //img.alt = 'Cat image';
+        //carouselItem.appendChild(img);
+        
+        breedSelect.appendChild(carouselItem);
+       // carousel.start;
+
+
+      
+
+           carouselItem.classList.add("carousel-item");
+            carousel.appendCarousel(carouselItem);
+            carousel.start();
       });
+    
+      
+
 
       // Populate info section (using first item for breed info)
       if (breedData.length > 0) {
